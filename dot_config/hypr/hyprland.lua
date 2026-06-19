@@ -359,11 +359,11 @@ hl.window_rule({
 -- })
 -- overlayLayerRule:set_enabled(false)
 
-hl.layer_rule({
-    name  = "blur-waybar",
-    match = { namespace = "^waybar$" },
-    blur  = true,
-})
+-- hl.layer_rule({
+--     name  = "blur-waybar",
+--     match = { namespace = "^waybar$" },
+--     blur  = true,
+-- })
 
 -- Hyprland-run windowrule
 hl.window_rule({
