@@ -378,33 +378,33 @@ hl.window_rule({
 ---- SCORCIATOIE STILE MACOS (Cmd -> Ctrl nelle App) --
 ------------------------------------------------------
 
-local function send_mac_shortcut(mods, key)
-    return hl.dsp.exec_cmd(string.format("hyprctl dispatch \"hl.dsp.send_shortcut({ mods = '%s', key = '%s', window = 'activewindow' })\"", mods, key))
+local function send_mac_shortcut(key)
+    return hl.dsp.exec_cmd(string.format("/home/p-lorenzo/.config/hypr/send_shortcut.sh %s", key))
 end
 
--- Cmd + C (Copia) -> Invia Ctrl + C
-hl.bind("SUPER + C", send_mac_shortcut("CTRL", "C"), { repeating = false })
+-- Cmd + C (Copia) -> Invia Ctrl + C (o Ctrl + Shift + C nel terminale)
+hl.bind("SUPER + C", send_mac_shortcut("C"), { repeating = false })
 
--- Cmd + V (Incolla) -> Invia Ctrl + V
-hl.bind("SUPER + V", send_mac_shortcut("CTRL", "V"), { repeating = false })
+-- Cmd + V (Incolla) -> Invia Ctrl + V (o Ctrl + Shift + V nel terminale)
+hl.bind("SUPER + V", send_mac_shortcut("V"), { repeating = false })
 
 -- Cmd + X (Taglia) -> Invia Ctrl + X
-hl.bind("SUPER + X", send_mac_shortcut("CTRL", "X"), { repeating = false })
+hl.bind("SUPER + X", send_mac_shortcut("X"), { repeating = false })
 
 -- Cmd + A (Seleziona Tutto) -> Invia Ctrl + A
-hl.bind("SUPER + A", send_mac_shortcut("CTRL", "A"), { repeating = false })
+hl.bind("SUPER + A", send_mac_shortcut("A"), { repeating = false })
 
 -- Cmd + Z (Annulla) -> Invia Ctrl + Z
-hl.bind("SUPER + Z", send_mac_shortcut("CTRL", "Z"), { repeating = false })
+hl.bind("SUPER + Z", send_mac_shortcut("Z"), { repeating = false })
 
 -- Cmd + S (Salva) -> Invia Ctrl + S
-hl.bind("SUPER + S", send_mac_shortcut("CTRL", "S"), { repeating = false })
+hl.bind("SUPER + S", send_mac_shortcut("S"), { repeating = false })
 
 -- Cmd + T (Nuova Scheda) -> Invia Ctrl + T
-hl.bind("SUPER + T", send_mac_shortcut("CTRL", "T"), { repeating = false })
+hl.bind("SUPER + T", send_mac_shortcut("T"), { repeating = false })
 
 -- Cmd + W (Chiudi Scheda/File) -> Invia Ctrl + W
-hl.bind("SUPER + W", send_mac_shortcut("CTRL", "W"), { repeating = false })
+hl.bind("SUPER + W", send_mac_shortcut("W"), { repeating = false })
 
 -- Cmd + Q (Chiudi Applicazione standard) -> Invia Alt + F4
-hl.bind("SUPER + Q", send_mac_shortcut("ALT", "F4"), { repeating = false })
+hl.bind("SUPER + Q", send_mac_shortcut("Q"), { repeating = false })
