@@ -418,13 +418,11 @@ hl.config({
     plugin = {
         hyprexpo = {
             columns = 3,
-            gap_size = 8,
-            bg_col = "rgba(30, 30, 46, 0.8)", -- Vetro sfocato scuro Catppuccin
+            gaps_in = 8,
+            gaps_out = 8,
+            bg_col = "0xcc1e1e2e", -- Vetro sfocato scuro Catppuccin Mocha
             workspace_method = "center current",
-            enable_gesture = true,
-            gesture_fingers = 3,
             gesture_distance = 300,
-            gesture_positive = true,
         }
     }
 })
