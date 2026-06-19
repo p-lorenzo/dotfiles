@@ -433,4 +433,8 @@ hl.on("hyprland.start", function ()
 end)
 
 -- Attiva l'Expose premendo il tasto Mission Control del mouse (XF86LaunchA)
-hl.bind("XF86LaunchA", hl.dsp.exec_cmd("hyprctl dispatch hyprexpo:expo toggle"), { repeating = false })
+hl.bind("XF86LaunchA", function()
+    if hl.plugin.hyprexpo ~= nil then
+        hl.plugin.hyprexpo.expo("toggle")
+    end
+end, { repeating = false })
