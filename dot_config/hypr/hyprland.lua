@@ -379,28 +379,28 @@ hl.window_rule({
 ------------------------------------------------------
 
 -- Cmd + C (Copia) -> Invia Ctrl + C
-hl.bind("SUPER + C", hl.dsp.send_shortcut({ mods = "CTRL", key = "C", window = "activewindow" }))
+hl.bind("SUPER + C", hl.dsp.send_shortcut({ mods = "CTRL", key = "C", window = "activewindow" }), { repeating = false })
 
 -- Cmd + V (Incolla) -> Invia Ctrl + V
-hl.bind("SUPER + V", hl.dsp.send_shortcut({ mods = "CTRL", key = "V", window = "activewindow" }))
+hl.bind("SUPER + V", hl.dsp.send_shortcut({ mods = "CTRL", key = "V", window = "activewindow" }), { repeating = false })
 
 -- Cmd + X (Taglia) -> Invia Ctrl + X
-hl.bind("SUPER + X", hl.dsp.send_shortcut({ mods = "CTRL", key = "X", window = "activewindow" }))
+hl.bind("SUPER + X", hl.dsp.send_shortcut({ mods = "CTRL", key = "X", window = "activewindow" }), { repeating = false })
 
 -- Cmd + A (Seleziona Tutto) -> Invia Ctrl + A
-hl.bind("SUPER + A", hl.dsp.send_shortcut({ mods = "CTRL", key = "A", window = "activewindow" }))
+hl.bind("SUPER + A", hl.dsp.send_shortcut({ mods = "CTRL", key = "A", window = "activewindow" }), { repeating = false })
 
 -- Cmd + Z (Annulla) -> Invia Ctrl + Z
-hl.bind("SUPER + Z", hl.dsp.send_shortcut({ mods = "CTRL", key = "Z", window = "activewindow" }))
+hl.bind("SUPER + Z", hl.dsp.send_shortcut({ mods = "CTRL", key = "Z", window = "activewindow" }), { repeating = false })
 
 -- Cmd + S (Salva) -> Invia Ctrl + S
-hl.bind("SUPER + S", hl.dsp.send_shortcut({ mods = "CTRL", key = "S", window = "activewindow" }))
+hl.bind("SUPER + S", hl.dsp.send_shortcut({ mods = "CTRL", key = "S", window = "activewindow" }), { repeating = false })
 
 -- Cmd + T (Nuova Scheda) -> Invia Ctrl + T
-hl.bind("SUPER + T", hl.dsp.send_shortcut({ mods = "CTRL", key = "T", window = "activewindow" }))
+hl.bind("SUPER + T", hl.dsp.send_shortcut({ mods = "CTRL", key = "T", window = "activewindow" }), { repeating = false })
 
 -- Cmd + W (Chiudi Scheda/File) -> Invia Ctrl + W
-hl.bind("SUPER + W", hl.dsp.send_shortcut({ mods = "CTRL", key = "W", window = "activewindow" }))
+hl.bind("SUPER + W", hl.dsp.send_shortcut({ mods = "CTRL", key = "W", window = "activewindow" }), { repeating = false })
 
 -- Cmd + Q (Chiudi Applicazione standard) -> Invia Alt + F4
-hl.bind("SUPER + Q", hl.dsp.send_shortcut({ mods = "ALT", key = "F4", window = "activewindow" }))
+hl.bind("SUPER + Q", hl.dsp.send_shortcut({ mods = "ALT", key = "F4", window = "activewindow" }), { repeating = false })
