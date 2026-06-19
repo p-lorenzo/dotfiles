@@ -413,26 +413,26 @@ hl.bind("SUPER + Q", send_mac_shortcut("Q"), { repeating = false })
 ---- HYPREXPO (MISSION CONTROL)
 --------------------------------
 
--- Configurazione del plugin
-hl.config({
-    plugin = {
-        hyprexpo = {
-            columns = 3,
-            gap_size = 8,
-            bg_col = "rgba(30, 30, 46, 0.8)", -- Vetro sfocato scuro Catppuccin
-            workspace_method = "center current",
-            enable_gesture = true,
-            gesture_fingers = 3,
-            gesture_distance = 300,
-            gesture_positive = true,
-        }
-    }
-})
+-- Configurazione del plugin (Disabilitata temporaneamente finché non viene compilato ed abilitato il plugin)
+-- hl.config({
+--     plugin = {
+--         hyprexpo = {
+--             columns = 3,
+--             gap_size = 8,
+--             bg_col = "rgba(30, 30, 46, 0.8)", -- Vetro sfocato scuro Catppuccin
+--             workspace_method = "center current",
+--             enable_gesture = true,
+--             gesture_fingers = 3,
+--             gesture_distance = 300,
+--             gesture_positive = true,
+--         }
+--     }
+-- })
 
 -- Carica i plugin all'avvio di Hyprland
 hl.on("hyprland.start", function () 
     hl.exec_cmd("hyprpm reload")
 end)
 
--- Attiva l'Expose premendo il tasto Mission Control del mouse (XF86LaunchA)
-hl.bind("XF86LaunchA", hl.dsp.exec_cmd("hyprctl dispatch hyprexpo:expo toggle"), { repeating = false })
+-- Attiva l'Expose premendo il tasto Mission Control del mouse (XF86LaunchA) (Disabilitato temporaneamente)
+-- hl.bind("XF86LaunchA", hl.dsp.exec_cmd("hyprctl dispatch hyprexpo:expo toggle"), { repeating = false })
