@@ -276,6 +276,7 @@ hl.bind(mainMod .. " + F", hl.dsp.window.float({ action = "toggle" }))
 hl.bind("CTRL + SPACE", hl.dsp.exec_cmd(menu))
 hl.bind(mainMod .. " + P", hl.dsp.window.pseudo())
 hl.bind(mainMod .. " + J", hl.dsp.layout("togglesplit"))    -- dwindle only
+hl.bind(mainMod .. " + ALT + W", hl.dsp.exec_cmd("/home/p-lorenzo/.config/hypr/rotate_wallpaper.sh"))
 
 -- Move focus with mainMod + arrow keys
 hl.bind(mainMod .. " + left",  hl.dsp.focus({ direction = "left" }))
@@ -427,9 +428,10 @@ hl.config({
     }
 })
 
--- Carica i plugin all'avvio di Hyprland
+-- Carica i plugin e imposta lo sfondo all'avvio di Hyprland
 hl.on("hyprland.start", function () 
     hl.exec_cmd("hyprpm reload")
+    hl.exec_cmd("/home/p-lorenzo/.config/hypr/rotate_wallpaper.sh --daemon &")
 end)
 
 -- Attiva l'Expose premendo il tasto Mission Control del mouse (XF86LaunchA)
