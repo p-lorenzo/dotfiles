@@ -44,7 +44,7 @@ hl.monitor({
 -- Set programs that you use
 local terminal    = "kitty"
 local fileManager = "dolphin"
-local menu        = "hyprlauncher"
+local menu        = "rofi -show drun"
 
 
 -------------------
@@ -274,6 +274,7 @@ hl.bind(mainMod .. " + M", hl.dsp.exec_cmd("command -v hyprshutdown >/dev/null 2
 hl.bind(mainMod .. " + E", hl.dsp.exec_cmd(fileManager))
 hl.bind(mainMod .. " + F", hl.dsp.window.float({ action = "toggle" }))
 hl.bind("CTRL + SPACE", hl.dsp.exec_cmd(menu))
+hl.bind(mainMod .. " + TAB", hl.dsp.exec_cmd("rofi -show window"))
 hl.bind(mainMod .. " + P", hl.dsp.window.pseudo())
 hl.bind(mainMod .. " + J", hl.dsp.layout("togglesplit"))    -- dwindle only
 hl.bind(mainMod .. " + ALT + W", hl.dsp.exec_cmd("/home/p-lorenzo/.config/hypr/rotate_wallpaper.sh"))
@@ -360,11 +361,17 @@ hl.window_rule({
 -- })
 -- overlayLayerRule:set_enabled(false)
 
--- hl.layer_rule({
---     name  = "blur-waybar",
---     match = { namespace = "^waybar$" },
---     blur  = true,
--- })
+hl.layer_rule({
+    name  = "blur-waybar",
+    match = { namespace = "^waybar$" },
+    blur  = true,
+})
+
+hl.layer_rule({
+    name  = "blur-rofi",
+    match = { namespace = "^rofi$" },
+    blur  = true,
+})
 
 -- Hyprland-run windowrule
 hl.window_rule({
