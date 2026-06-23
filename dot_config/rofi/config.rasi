@@ -15,10 +15,10 @@ configuration {
 @theme "/dev/null"
 
 * {
-    bg-col:  #1e1e2e60; /* base catppuccin mocha semi-trasparente */
-    bg-col-light: #31324460;
-    border-col: #c6a0f680; /* bordo mauve semi-trasparente */
-    selected-col: #c6a0f6cc; /* highlight mauve */
+    bg-col:  #1e1e2ea6; /* base catppuccin mocha semi-trasparente (65% opacity, come waybar) */
+    bg-col-light: #11111b66; /* crust semi-trasparente (40% opacity, come i moduli di waybar) */
+    border-col: #ffffff14; /* bordo bianco stile vetro (8% opacity, come waybar) */
+    selected-col: #89b4facc; /* highlight blu catppuccin (come i bottoni attivi) */
     blue: #89b4fa;
     fg-col: #cdd6f4;
     fg-col2: #a6adc8;
@@ -35,9 +35,9 @@ element-text, element-icon , mode-switcher {
 
 window {
     height: 400px;
-    border: 2px;
+    border: 1px;
     border-color: @border-col;
-    border-radius: 16px;
+    border-radius: 12px;
     background-color: @bg-col;
     text-color: @fg-col;
 }

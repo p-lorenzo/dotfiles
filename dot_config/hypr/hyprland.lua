@@ -102,11 +102,11 @@ hl.config({
         gaps_in  = 5,
         gaps_out = 20,
 
-        border_size = 2,
+        border_size = 1,
 
         col = {
-            active_border   = { colors = {"rgba(33ccffee)", "rgba(00ff99ee)"}, angle = 45 },
-            inactive_border = "rgba(595959aa)",
+            active_border   = { colors = {"rgba(137, 180, 250, 0.8)", "rgba(148, 226, 213, 0.8)"}, angle = 45 },
+            inactive_border = "rgba(255, 255, 255, 0.1)",
         },
 
         -- Set to true to enable resizing windows by clicking and dragging on borders and gaps
@@ -119,12 +119,12 @@ hl.config({
     },
 
     decoration = {
-        rounding       = 10,
+        rounding       = 12,
         rounding_power = 2,
 
         -- Change transparency of focused and unfocused windows
         active_opacity   = 1.0,
-        inactive_opacity = 1.0,
+        inactive_opacity = 0.85,
 
         shadow = {
             enabled      = true,
@@ -134,10 +134,17 @@ hl.config({
         },
 
         blur = {
-            enabled   = true,
-            size      = 3,
-            passes    = 1,
-            vibrancy  = 0.1696,
+            enabled           = true,
+            size              = 8,
+            passes            = 3,
+            ignore_opacity    = true,
+            vibrancy          = 0.2,
+            vibrancy_darkness = 0.0,
+            noise             = 0.0117,
+            contrast          = 0.8916,
+            brightness        = 0.8172,
+            special           = true,
+            popups            = true,
         },
     },
 
@@ -373,6 +380,13 @@ hl.layer_rule({
     blur  = true,
 })
 
+hl.layer_rule({
+    name  = "blur-notifications",
+    match = { namespace = "^notifications$" },
+    blur  = true,
+    ignore_alpha = 0.2,
+})
+
 -- Hyprland-run windowrule
 hl.window_rule({
     name  = "move-hyprland-run",
@@ -415,7 +429,8 @@ hl.bind("SUPER + T", send_mac_shortcut("T"), { repeating = false })
 hl.bind("SUPER + W", send_mac_shortcut("W"), { repeating = false })
 
 -- Cmd + Q (Chiudi Applicazione standard) -> Invia Alt + F4
-hl.bind("SUPER + Q", send_mac_shortcut("Q"), { repeating = false })
+-- hl.bind("SUPER + Q", send_mac_shortcut("Q"), { repeating = false })
+
 
 --------------------------------
 ---- HYPREXPO (MISSION CONTROL)
