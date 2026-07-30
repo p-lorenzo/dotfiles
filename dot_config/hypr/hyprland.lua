@@ -71,6 +71,7 @@ local menu        = "rofi -show drun"
 
 hl.env("XCURSOR_SIZE", "24")
 hl.env("HYPRCURSOR_SIZE", "24")
+hl.env("ELECTRON_OZONE_PLATFORM_HINT", "wayland")
 
 
 -----------------------
@@ -137,7 +138,7 @@ hl.config({
             enabled           = true,
             size              = 8,
             passes            = 3,
-            ignore_opacity    = true,
+            ignore_opacity    = false,
             vibrancy          = 0.2,
             vibrancy_darkness = 0.0,
             noise             = 0.0117,
@@ -275,7 +276,7 @@ hl.device({
 local mainMod = "SUPER" -- Sets "Windows" key as main modifier
 
 -- Example binds, see https://wiki.hypr.land/Configuring/Basics/Binds/ for more
-hl.bind(mainMod .. " + T", hl.dsp.exec_cmd(terminal))
+-- Cmd+T is handled by send_shortcut.sh: new Chrome tab in Chrome, terminal elsewhere.
 local closeWindowBind = hl.bind(mainMod .. " + Q", hl.dsp.window.close())
 hl.bind(mainMod .. " + M", hl.dsp.exec_cmd("command -v hyprshutdown >/dev/null 2>&1 && hyprshutdown || hyprctl dispatch 'hl.dsp.exit()'"))
 hl.bind(mainMod .. " + E", hl.dsp.exec_cmd(fileManager))
@@ -285,6 +286,15 @@ hl.bind(mainMod .. " + TAB", hl.dsp.exec_cmd("rofi -show window"))
 hl.bind(mainMod .. " + P", hl.dsp.window.pseudo())
 hl.bind(mainMod .. " + J", hl.dsp.layout("togglesplit"))    -- dwindle only
 hl.bind(mainMod .. " + ALT + W", hl.dsp.exec_cmd("/home/p-lorenzo/.config/hypr/rotate_wallpaper.sh"))
+
+-- Riscrittura locale con llama.cpp
+hl.bind("SUPER + G", hl.dsp.exec_cmd("/home/p-lorenzo/.local/bin/llama-cleanup rewrite"), { repeating = false })
+hl.bind("SUPER + SHIFT + G", hl.dsp.exec_cmd("/home/p-lorenzo/.local/bin/llama-cleanup translate"), { repeating = false })
+
+-- Screenshot (Cattura area selezionata -> Clipboard con notifica)
+local screenshotCmd = "grim -g \"$(slurp)\" - | wl-copy && notify-send 'Screenshot' 'Copiato negli appunti!' -i image-x-generic"
+hl.bind("Print", hl.dsp.exec_cmd(screenshotCmd))
+hl.bind(mainMod .. " + SHIFT + 4", hl.dsp.exec_cmd(screenshotCmd))
 
 -- Move focus with mainMod + arrow keys
 hl.bind(mainMod .. " + left",  hl.dsp.focus({ direction = "left" }))
@@ -297,7 +307,11 @@ hl.bind(mainMod .. " + down",  hl.dsp.focus({ direction = "down" }))
 for i = 1, 10 do
     local key = i % 10 -- 10 maps to key 0
     hl.bind(mainMod .. " + " .. key,             hl.dsp.focus({ workspace = i}))
-    hl.bind(mainMod .. " + SHIFT + " .. key,     hl.dsp.window.move({ workspace = i }))
+    if i == 4 then
+        hl.bind(mainMod .. " + CTRL + SHIFT + " .. key, hl.dsp.window.move({ workspace = i }))
+    else
+        hl.bind(mainMod .. " + SHIFT + " .. key,        hl.dsp.window.move({ workspace = i }))
+    end
 end
 
 -- Example special workspace (scratchpad)
@@ -387,6 +401,24 @@ hl.layer_rule({
     ignore_alpha = 0.2,
 })
 
+hl.window_rule({
+    name  = "opaque-codex",
+    match = { class = "Codex" },
+
+    opaque  = true,
+    no_blur = true,
+    opacity = "1.0 1.0",
+})
+
+hl.window_rule({
+    name  = "opaque-google-chrome",
+    match = { class = "google-chrome" },
+
+    opaque  = true,
+    no_blur = true,
+    opacity = "1.0 1.0",
+})
+
 -- Hyprland-run windowrule
 hl.window_rule({
     name  = "move-hyprland-run",
@@ -424,6 +456,10 @@ hl.bind("SUPER + S", send_mac_shortcut("S"), { repeating = false })
 
 -- Cmd + T (Nuova Scheda) -> Invia Ctrl + T
 hl.bind("SUPER + T", send_mac_shortcut("T"), { repeating = false })
+
+-- Cmd + R/L in Chrome -> Ricarica / Barra indirizzi
+hl.bind("SUPER + R", send_mac_shortcut("R"), { repeating = false })
+hl.bind("SUPER + L", send_mac_shortcut("L"), { repeating = false })
 
 -- Cmd + W (Chiudi Scheda/File) -> Invia Ctrl + W
 hl.bind("SUPER + W", send_mac_shortcut("W"), { repeating = false })

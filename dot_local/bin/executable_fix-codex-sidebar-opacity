@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+css_file="${1:-/usr/lib/openai-codex-desktop/content/webview/assets/app-main-D4WiCdvh.css}"
+needle='var(--color-token-editor-background) 55%, transparent'
+replacement='var(--color-token-editor-background) 100%, transparent'
+override_marker='codex-sidebar-opacity-override'
+override_css='/* codex-sidebar-opacity-override */[data-codex-window-type=electron] .app-shell-left-panel{background:var(--color-token-editor-background)!important;overflow:visible}[data-codex-window-type=electron] .app-shell-left-panel:after{inset:0 calc(-1 * var(--radius-2xl)) 0 auto;width:var(--radius-2xl);background:inherit;content:"";pointer-events:none;position:absolute}'
+
+if [[ ! -f "$css_file" ]]; then
+  echo "Codex CSS file not found: $css_file" >&2
+  exit 1
+fi
+
+if grep -qF "$override_marker" "$css_file"; then
+  echo "Codex sidebar opacity override already applied."
+  exit 0
+fi
+
+if grep -qF "$needle" "$css_file"; then
+  sudo perl -0pi -e 's/var\(--color-token-editor-background\) 55%, transparent/var(--color-token-editor-background) 100%, transparent/g' "$css_file"
+elif ! grep -qF "$replacement" "$css_file"; then
+  echo "Could not find expected Codex sidebar opacity pattern in: $css_file" >&2
+  exit 1
+fi
+
+printf '\n%s\n' "$override_css" | sudo tee -a "$css_file" >/dev/null
+echo "Codex sidebar opacity patch applied. Restart Codex."

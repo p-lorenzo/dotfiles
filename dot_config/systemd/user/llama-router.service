@@ -1,0 +1,10 @@
+[Unit]
+Description=llama.cpp local model router
+After=graphical-session.target
+
+[Service]
+ExecStart=/home/p-lorenzo/llama.cpp/build/bin/llama-server --models-preset /home/p-lorenzo/.config/llama.cpp/odysseus-models.ini --models-max 1 --host 127.0.0.1 --port 8080
+Restart=on-failure
+
+[Install]
+WantedBy=default.target

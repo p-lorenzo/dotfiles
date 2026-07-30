@@ -1,0 +1,70 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+MODE="${1:-rewrite}"
+API="${LLAMA_CLEANUP_API:-http://127.0.0.1:8080/v1/chat/completions}"
+MODEL="${LLAMA_CLEANUP_MODEL:-gemma-4-26b-a4b-it}"
+PROMPT="${XDG_CONFIG_HOME:-$HOME/.config}/llama-cleanup/system.txt"
+SEND="$HOME/.config/hypr/send_shortcut.sh"
+
+notify() { notify-send "LLM cleanup" "$1"; }
+restore() { printf %s "$old_clipboard" | wl-copy; }
+fail() { restore; notify "$1"; exit 1; }
+send() { hyprctl dispatch "hl.dsp.send_shortcut({ mods = '$1', key = '$2', window = 'activewindow' })" >/dev/null; }
+
+[[ "$MODE" == rewrite || "$MODE" == translate ]] || { echo "Usage: llama-cleanup {rewrite|translate}" >&2; exit 2; }
+[[ -r "$PROMPT" ]] || { notify "Prompt mancante: $PROMPT"; exit 1; }
+
+window="$(hyprctl activewindow -j)"
+address="$(jq -r '.address' <<<"$window")"
+class="$(jq -r '.class' <<<"$window")"
+title="$(jq -r '.title' <<<"$window")"
+old_clipboard="$(wl-paste --no-newline 2>/dev/null || true)"
+sentinel="llama-cleanup-$RANDOM-$$"
+printf %s "$sentinel" | wl-copy
+"$SEND" C
+sleep 0.15
+text="$(wl-paste --no-newline 2>/dev/null || true)"
+[[ -n "$text" && "$text" != "$sentinel" ]] || fail "Nessun testo selezionato"
+
+url=""
+if [[ "$class" =~ ^(google-chrome|chromium|brave-browser|microsoft-edge|firefox)$ ]]; then
+  printf %s "$sentinel" | wl-copy
+  send CTRL L
+  sleep 0.08
+  send CTRL C
+  sleep 0.15
+  url="$(wl-paste --no-newline 2>/dev/null || true)"
+  [[ "$url" != "$sentinel" ]] || url=""
+  send "" ESCAPE
+fi
+printf %s "$text" | wl-copy
+
+instruction="Correggi e migliora il testo mantenendo la lingua originale."
+[[ "$MODE" == translate ]] && instruction="Correggi e migliora il testo, poi traducilo in inglese naturale."
+request="$(jq -n \
+  --arg model "$MODEL" \
+  --rawfile system "$PROMPT" \
+  --arg instruction "$instruction" \
+  --arg class "$class" --arg title "$title" --arg url "$url" --arg text "$text" \
+  '{model:$model, temperature:0.2, max_tokens:2048, chat_template_kwargs:{enable_thinking:false}, messages:[
+    {role:"system", content:$system},
+    {role:"user", content:($instruction + "\n\nContesto:\n- applicazione: " + $class + "\n- titolo: " + $title + "\n- URL: " + ($url // "") + "\n\nTesto da riscrivere:\n<text>\n" + $text + "\n</text>")}
+  ]}')"
+
+notify "Elaborazione in corso…"
+if ! response="$(curl --silent --show-error --fail-with-body --max-time 300 \
+  -H 'Content-Type: application/json' -d "$request" "$API")"; then
+  fail "llama.cpp non disponibile o richiesta fallita"
+fi
+result="$(jq -er '.choices[0].message.content | select(type == "string" and length > 0)' <<<"$response" 2>/dev/null)" \
+  || fail "Risposta LLM non valida"
+printf %s "$result" | wl-copy
+
+current_address="$(hyprctl activewindow -j | jq -r '.address')"
+if [[ "$current_address" != "$address" || "$class" =~ ^(kitty|Alacritty|foot|konsole|gnome-terminal)$ ]]; then
+  notify "Risultato copiato negli appunti"
+else
+  "$SEND" V
+  notify "Testo riscritto"
+fi
