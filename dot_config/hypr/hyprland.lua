@@ -44,7 +44,7 @@ hl.monitor({
 -- Set programs that you use
 local terminal    = "kitty"
 local fileManager = "dolphin"
-local menu        = "rofi -show drun"
+local menu        = "vicinae toggle"
 
 
 -------------------
@@ -282,7 +282,7 @@ hl.bind(mainMod .. " + M", hl.dsp.exec_cmd("command -v hyprshutdown >/dev/null 2
 hl.bind(mainMod .. " + E", hl.dsp.exec_cmd(fileManager))
 hl.bind(mainMod .. " + F", hl.dsp.window.float({ action = "toggle" }))
 hl.bind("CTRL + SPACE", hl.dsp.exec_cmd(menu))
-hl.bind(mainMod .. " + TAB", hl.dsp.exec_cmd("rofi -show window"))
+hl.bind(mainMod .. " + TAB", hl.dsp.exec_cmd("vicinae toggle"))
 hl.bind(mainMod .. " + P", hl.dsp.window.pseudo())
 hl.bind(mainMod .. " + J", hl.dsp.layout("togglesplit"))    -- dwindle only
 hl.bind(mainMod .. " + ALT + W", hl.dsp.exec_cmd("/home/p-lorenzo/.config/hypr/rotate_wallpaper.sh"))
@@ -293,8 +293,10 @@ hl.bind("SUPER + SHIFT + G", hl.dsp.exec_cmd("/home/p-lorenzo/.local/bin/llama-c
 
 -- Screenshot (Cattura area selezionata -> Clipboard con notifica)
 local screenshotCmd = "grim -g \"$(slurp)\" - | wl-copy && notify-send 'Screenshot' 'Copiato negli appunti!' -i image-x-generic"
+local activeWindowScreenshotCmd = "/home/p-lorenzo/.config/hypr/screenshot_active_window.sh"
 hl.bind("Print", hl.dsp.exec_cmd(screenshotCmd))
 hl.bind(mainMod .. " + SHIFT + 4", hl.dsp.exec_cmd(screenshotCmd))
+hl.bind(mainMod .. " + Print", hl.dsp.exec_cmd(activeWindowScreenshotCmd))
 
 -- Move focus with mainMod + arrow keys
 hl.bind(mainMod .. " + left",  hl.dsp.focus({ direction = "left" }))
@@ -389,8 +391,8 @@ hl.layer_rule({
 })
 
 hl.layer_rule({
-    name  = "blur-rofi",
-    match = { namespace = "^rofi$" },
+    name  = "blur-vicinae",
+    match = { namespace = "^vicinae$" },
     blur  = true,
 })
 
@@ -399,6 +401,14 @@ hl.layer_rule({
     match = { namespace = "^notifications$" },
     blur  = true,
     ignore_alpha = 0.2,
+})
+
+-- Dolphin: vetro Catppuccin con blur, trasparenza e glow del bordo globale.
+hl.window_rule({
+    name  = "glass-dolphin",
+    match = { class = "^org[.]kde[.]dolphin$" },
+
+    opacity = "0.92 0.84",
 })
 
 hl.window_rule({
@@ -426,6 +436,14 @@ hl.window_rule({
 
     move  = "20 monitor_h-120",
     float = true,
+})
+
+-- Hades II (Wine/XWayland): avvio sempre a schermo intero
+hl.window_rule({
+    name  = "fullscreen-hades2",
+    match = { class = "hades2.exe" },
+
+    fullscreen = true,
 })
 
 ------------------------------------------------------
