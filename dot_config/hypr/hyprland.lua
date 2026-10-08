@@ -45,6 +45,7 @@ hl.monitor({
 local terminal    = "kitty"
 local fileManager = "dolphin"
 local menu        = "vicinae toggle"
+local gamingMode  = "/home/p-lorenzo/.config/hypr/gaming-mode.sh"
 
 
 -------------------
@@ -287,6 +288,12 @@ hl.bind(mainMod .. " + P", hl.dsp.window.pseudo())
 hl.bind(mainMod .. " + J", hl.dsp.layout("togglesplit"))    -- dwindle only
 hl.bind(mainMod .. " + ALT + W", hl.dsp.exec_cmd("/home/p-lorenzo/.config/hypr/rotate_wallpaper.sh"))
 
+-- Gaming mode: resta disponibile anche quando un gioco cattura le scorciatoie.
+hl.bind(mainMod .. " + CTRL + G", hl.dsp.exec_cmd(gamingMode .. " toggle"), {
+    repeating   = false,
+    description = "Attiva o disattiva la gaming mode",
+})
+
 -- Riscrittura locale con llama.cpp
 hl.bind("SUPER + G", hl.dsp.exec_cmd("/home/p-lorenzo/.local/bin/llama-cleanup rewrite"), { repeating = false })
 hl.bind("SUPER + SHIFT + G", hl.dsp.exec_cmd("/home/p-lorenzo/.local/bin/llama-cleanup translate"), { repeating = false })
@@ -438,12 +445,40 @@ hl.window_rule({
     float = true,
 })
 
--- Hades II (Wine/XWayland): avvio sempre a schermo intero
+-- I giochi Steam escono dal layout tiling e partono fullscreen. Steam resta tiled.
 hl.window_rule({
-    name  = "fullscreen-hades2",
+    name  = "gaming-steam-apps",
+    match = { initial_class = "^steam_app_[0-9]+$" },
+
+    float                 = true,
+    fullscreen            = true,
+    content               = "game",
+    border_size           = 0,
+    rounding              = 0,
+    idle_inhibit          = "always",
+    no_anim               = true,
+    no_blur               = true,
+    no_shadow             = true,
+    no_shortcuts_inhibit  = true,
+    opaque                = true,
+})
+
+-- Hades II usa una classe propria anziché steam_app_<id>.
+hl.window_rule({
+    name  = "gaming-hades2",
     match = { class = "hades2.exe" },
 
-    fullscreen = true,
+    float                 = true,
+    fullscreen            = true,
+    content               = "game",
+    border_size           = 0,
+    rounding              = 0,
+    idle_inhibit          = "always",
+    no_anim               = true,
+    no_blur               = true,
+    no_shadow             = true,
+    no_shortcuts_inhibit  = true,
+    opaque                = true,
 })
 
 ------------------------------------------------------
@@ -490,7 +525,11 @@ hl.bind("SUPER + W", send_mac_shortcut("W"), { repeating = false })
 ---- HYPREXPO (MISSION CONTROL)
 --------------------------------
 
+-- Interruttore temporaneo: false finché hyprexpo non viene ricompilato (version mismatch)
+local HYPREXPO_ENABLED = false
+
 -- Configurazione del plugin
+if HYPREXPO_ENABLED then
 hl.config({
     plugin = {
         hyprexpo = {
@@ -503,6 +542,7 @@ hl.config({
         }
     }
 })
+end
 
 -- Carica i plugin e imposta lo sfondo all'avvio di Hyprland
 hl.on("hyprland.start", function () 
@@ -511,8 +551,38 @@ hl.on("hyprland.start", function ()
 end)
 
 -- Attiva l'Expose premendo il tasto Mission Control del mouse (XF86LaunchA)
+if HYPREXPO_ENABLED then
 hl.bind("XF86LaunchA", function()
     if hl.plugin.hyprexpo ~= nil then
         hl.plugin.hyprexpo.expo("toggle")
     end
 end, { repeating = false })
+end
+
+
+--------------------------------
+---- HYMISSION (MISSION CONTROL)
+--------------------------------
+
+-- Le funzioni esistono solo quando il plugin è caricato (hyprpm reload all'avvio)
+if hl.plugin.hymission ~= nil then
+    -- Tasto Mission Control del mouse e Super+Tab: tutte le finestre di tutti i workspace
+    hl.bind("XF86LaunchA", function()
+        hl.plugin.hymission.toggle("forceall")
+    end, { repeating = false })
+    hl.bind("SUPER + TAB", function()
+        hl.plugin.hymission.toggle("forceall")
+    end, { repeating = false })
+    -- Super+Shift+Tab: solo il workspace corrente (App Exposé)
+    hl.bind("SUPER + SHIFT + TAB", function()
+        hl.plugin.hymission.toggle("onlycurrentworkspace")
+    end, { repeating = false })
+
+    -- 4 dita in verticale, come su macOS
+    hl.plugin.hymission.gesture({
+        fingers = 4,
+        direction = "vertical",
+        action = "toggle",
+        args = "forceall",
+    })
+end

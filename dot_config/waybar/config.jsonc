@@ -16,6 +16,7 @@
         "hyprland/window"
     ],
     "modules-right": [
+        "custom/gaming",
         "pulseaudio",
         "network",
         "cpu",
@@ -38,6 +39,16 @@
         "format": "{initialTitle}",
         "max-length": 40,
         "separate-outputs": true
+    },
+
+    "custom/gaming": {
+        "exec": "/home/p-lorenzo/.config/hypr/gaming-mode.sh status",
+        "return-type": "json",
+        "format": "{text}",
+        "signal": 8,
+        "on-click": "/home/p-lorenzo/.config/hypr/gaming-mode.sh toggle",
+        "on-click-right": "/home/p-lorenzo/.config/hypr/gaming-mode.sh steam",
+        "on-click-middle": "/home/p-lorenzo/.config/hypr/gaming-mode.sh bigpicture"
     },
 
     "tray": {

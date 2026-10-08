@@ -63,6 +63,7 @@ window#waybar {
 }
 
 /* Moduli di destra (Generico) */
+#custom-gaming,
 #pulseaudio,
 #network,
 #cpu,
@@ -84,6 +85,7 @@ window#waybar {
 }
 
 /* Hover effects */
+#custom-gaming:hover,
 #pulseaudio:hover,
 #network:hover,
 #cpu:hover,
@@ -95,6 +97,21 @@ window#waybar {
 }
 
 /* Colori specifici delle icone dei moduli */
+#custom-gaming {
+    color: #a6adc8;
+}
+
+#custom-gaming.on {
+    color: #11111b;
+    background-color: #a6e3a1;
+    box-shadow: 0 2px 8px rgba(166, 227, 161, 0.4);
+}
+
+#custom-gaming.on:hover {
+    color: #11111b;
+    background-color: #b5e8ad;
+}
+
 #pulseaudio {
     color: #89b4fa;
 }
